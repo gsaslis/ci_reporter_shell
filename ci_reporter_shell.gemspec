@@ -9,19 +9,19 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Michal Cichra']
   spec.email         = ['michal@o2h.cz']
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q{Write JUnit reports when executing shell scripts}
+  spec.description   = %q{If you need to report shell script results to JUnit}
+  spec.homepage      = 'https://github.com/3scale/ci_reporter_shell'
 
   spec.files         = Dir['lib/**/*.rb'] + Dir['exe/**/*'] + %w(README.md Rakefile)
-  spec.bindir        = "exe"
+  spec.bindir        = 'exe'
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
-  spec.require_paths = ["lib"]
+  spec.require_paths = ['lib']
 
   spec.license = 'MIT'
 
-  spec.add_development_dependency "bundler", "~> 1.11"
-  spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency 'bundler', '~> 1.11'
+  spec.add_development_dependency 'rake', '~> 10.0'
 
   spec.add_development_dependency 'rspec', '~> 3.4'
 
