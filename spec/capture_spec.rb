@@ -4,7 +4,12 @@ RSpec.describe CiReporterShell::Capture do
   subject(:capture) { described_class.new([{'FOOBAR' => '1'}, 'echo ${FOOBAR}']) }
 
   context '#execute' do
-    subject(:execute) { capture.execute }
+    subject(:result) { capture.execute }
     it { is_expected.to be_a(CiReporterShell::Result) }
+
+    context 'result.stdout' do
+      subject(:stdout) { result.stdout.read }
+      it { is_expected.to eq("1\n") }
+    end
   end
 end

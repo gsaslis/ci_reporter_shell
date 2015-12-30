@@ -9,22 +9,23 @@ module CiReporterShell
     end
 
     def execute
-      read_stdout, write_stdout = IO.pipe
-      read_stderr, write_stderr = IO.pipe
+      stdout = Tempfile.new('stdout')
+      stderr = Tempfile.new('stderr')
 
-      status = nil
+      time = status = nil
 
-      time = ::Benchmark.realtime do
-        pid = ::Process.spawn(*command.to_a, out: write_stdout, err: write_stderr)
-
-        _, status = ::Process.wait2(pid)
+      IO.popen(['tee', stdout.path], 'w') do |out|
+        IO.popen(['tee', stderr.path], 'w') do |err|
+          time = ::Benchmark.realtime do
+            _, status = ::Process.wait2 ::Process.spawn(*command.to_a,
+                                                        out: out,
+                                                        err: err)
+          end
+        end
       end
 
-      write_stderr.close
-      write_stdout.close
-
-      CiReporterShell::Result.new(stdout: read_stdout,
-                                  stderr: read_stderr,
+      CiReporterShell::Result.new(stdout: stdout,
+                                  stderr: stderr,
                                   status: status,
                                   time: time)
     end
