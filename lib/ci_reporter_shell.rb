@@ -8,7 +8,11 @@ module CiReporterShell
 
   module_function
 
-  def report
+  def report(path = nil)
+    ci_reports = ENV['CI_REPORTS']
+    ENV['CI_REPORTS'] = path
     CiReporterShell::Report.new('shell')
+  ensure
+    ENV['CI_REPORTS'] = ci_reports
   end
 end
