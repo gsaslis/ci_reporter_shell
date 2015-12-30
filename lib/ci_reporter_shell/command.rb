@@ -1,6 +1,7 @@
 require 'ci/reporter/output_capture'
 require 'shellwords'
 require 'ci_reporter_shell/result'
+require 'ci_reporter_shell/capture'
 
 module CiReporterShell
   class Command
