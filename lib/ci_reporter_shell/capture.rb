@@ -19,7 +19,8 @@ module CiReporterShell
           time = ::Benchmark.realtime do
             _, status = ::Process.wait2 ::Process.spawn(*command.to_a,
                                                         out: out,
-                                                        err: err)
+                                                        err: err,
+                                                        umask: File.umask)
           end
         end
       end
