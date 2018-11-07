@@ -30,7 +30,9 @@ module CiReporterShell
 
             _, status = ::Process.wait2 pid
           end
+          err.close
         end
+        out.close
       end
 
       CiReporterShell::Result.new(stdout: stdout,
