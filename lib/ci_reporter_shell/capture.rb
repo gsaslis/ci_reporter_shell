@@ -13,16 +13,22 @@ module CiReporterShell
       stderr = Tempfile.new('stderr')
 
       time = status = nil
-      
+
+      File.open('/tmp/commands', 'a') do |f|
+        f.puts "passed in a broken command #{command.inspect}"
+      end
+
       IO.popen(['tee', stdout.path], 'w') do |out|
         IO.popen(['tee', stderr.path], 'w') do |err|
           time = ::Benchmark.realtime do
-            pid ::Process.spawn(*command.to_a,
-                             out: out,
-                             err: err,
-                             umask: File.umask)
-            
-              _, status = ::Process.wait2 pid
+            pid = ::Process.spawn(*command.to_a,
+                                  out: out,
+                                  err: err,
+                                  umask: File.umask)
+
+            puts "WARN: irregular pid returned by spawn: #{pid}" unless pid > 0
+
+            _, status = ::Process.wait2 pid
           end
         end
       end
