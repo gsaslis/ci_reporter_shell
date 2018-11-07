@@ -14,20 +14,16 @@ module CiReporterShell
 
       time = status = nil
       
-      unless command.nil? || command.empty?
-        IO.popen(['tee', stdout.path], 'w') do |out|
-          IO.popen(['tee', stderr.path], 'w') do |err|
-            time = ::Benchmark.realtime do
-              _, status = ::Process.wait2 ::Process.spawn(*command.to_a,
-                                                          out: out,
-                                                          err: err,
-                                                          umask: File.umask)
-            end
+      IO.popen(['tee', stdout.path], 'w') do |out|
+        IO.popen(['tee', stderr.path], 'w') do |err|
+          time = ::Benchmark.realtime do
+            pid ::Process.spawn(*command.to_a,
+                             out: out,
+                             err: err,
+                             umask: File.umask)
+            
+              _, status = ::Process.wait2 pid
           end
-        end
-      else
-        File.open('/tmp/failure', 'w') do |f|
-          f.puts "passed in a broken command #{command.inspect}"
         end
       end
 
